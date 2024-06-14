@@ -52,12 +52,9 @@ public class TestAuto extends LinearOpMode {
 
         while(!isStarted() && !opModeIsActive()) {}
 
+        Actions.runBlocking(trajectory);
 
-        while (!isStopRequested()) {
-
-            Actions.runBlocking(trajectory);
-        }
-
+        Actions.runBlocking(trajectory);
     }
 
 }
