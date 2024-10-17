@@ -28,7 +28,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class TestAuto extends LinearOpMode {
 
     MecanumDrive drive;
-    Action trajectory;
 
     @Override
     public void runOpMode () {
@@ -36,25 +35,28 @@ public class TestAuto extends LinearOpMode {
 
         drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, Math.toRadians(0)));
 
-        trajectory = drive.actionBuilder(drive.pose)
-                .lineToXSplineHeading(10, Math.toRadians(0))
-                .turn(Math.toRadians(90))
-                .setTangent(Math.toRadians(90))
-                .lineToY(10)
-                .turn(Math.toRadians(90))
-                .setTangent(Math.toRadians(0))
-                .lineToX(0)
-                .turn(Math.toRadians(90))
-                .setTangent(Math.toRadians(90))
-                .lineToY(0)
-                .turn(Math.toRadians(90))
-                .build();
+
 
         while(!isStarted() && !opModeIsActive()) {}
 
-        Actions.runBlocking(trajectory);
+        while(opModeIsActive() && !isStopRequested()) {
+            Action trajectory = drive.actionBuilder(drive.pose)
+                    .lineToXSplineHeading(10, Math.toRadians(0))
+                    .turn(Math.toRadians(90))
+                    .setTangent(Math.toRadians(90))
+                    .lineToY(10)
+                    .turn(Math.toRadians(90))
+                    .setTangent(Math.toRadians(0))
+                    .lineToX(0)
+                    .turn(Math.toRadians(90))
+                    .setTangent(Math.toRadians(90))
+                    .lineToY(0)
+                    .turn(Math.toRadians(90))
+                    .build();
 
-        Actions.runBlocking(trajectory);
+            Actions.runBlocking(trajectory);
+        }
+
     }
 
 }
