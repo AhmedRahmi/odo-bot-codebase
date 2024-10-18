@@ -288,20 +288,32 @@ public final class MecanumDrive {
             } else {
                 t = Actions.now() - beginTs;
             }
-
-            if (t >= timeTrajectory.duration) {
-                leftFront.setPower(0);
-                leftBack.setPower(0);
-                rightBack.setPower(0);
-                rightFront.setPower(0);
-
-                return false;
-            }
-
+            //TODO: add this to normal bot
             Pose2dDual<Time> txWorldTarget = timeTrajectory.get(t);
             targetPoseWriter.write(new PoseMessage(txWorldTarget.value()));
 
             PoseVelocity2d robotVelRobot = updatePoseEstimate();
+
+            Pose2d positionError = txWorldTarget.value().minusExp(pose);
+
+            double timeAfterEnd = t - timeTrajectory.duration;
+
+            //TODO: test please
+            if(timeAfterEnd > 0) {
+                double allowedError = (1 / 1 + (1 / timeAfterEnd)) * 8; // natlog passed into sigmoid, dont ask I use it for K/D
+
+                if (positionError.position.norm() < allowedError) {
+                    leftFront.setPower(0);
+                    leftBack.setPower(0);
+                    rightBack.setPower(0);
+                    rightFront.setPower(0);
+
+                    return false;
+                }
+            }
+
+
+
 
             PoseVelocity2dDual<Time> command = new HolonomicController(
                     PARAMS.axialGain, PARAMS.lateralGain, PARAMS.headingGain,

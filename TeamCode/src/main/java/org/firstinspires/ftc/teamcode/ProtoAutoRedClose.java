@@ -22,7 +22,7 @@ public class ProtoAutoRedClose extends LinearOpMode {
 
 
         fullAuto = drive.actionBuilder(drive.pose)
-                .splineTo(new Vector2d(56, 14), 0)
+                .splineToConstantHeading(new Vector2d(24, -24), 0)
                 .build();
 
         while(!isStarted() && !opModeIsActive()) {}
