@@ -297,11 +297,13 @@ public final class MecanumDrive {
             Pose2d positionError = txWorldTarget.value().minusExp(pose);
 
             double timeAfterEnd = t - timeTrajectory.duration;
+            double allowedError = (1 / (1 + (1 / timeAfterEnd))) * 3;
 
+            double allowedHeadingError = (1 / (1 + (1 / timeAfterEnd))) * 7;
             //TODO: test please
             if(timeAfterEnd > 0) {
-                double allowedError = (1 / 1 + (1 / timeAfterEnd)) * 8; // natlog passed into sigmoid, dont ask I use it for K/D
-
+                // natlog passed into sigmoid, dont ask I use it for K/D
+                // fix heading error
                 if (positionError.position.norm() < allowedError) {
                     leftFront.setPower(0);
                     leftBack.setPower(0);
@@ -347,6 +349,7 @@ public final class MecanumDrive {
             Pose2d error = txWorldTarget.value().minusExp(pose);
             p.put("xError", error.position.x);
             p.put("yError", error.position.y);
+            p.put("allowedError: ", new Double(allowedError));
             p.put("headingError (deg)", Math.toDegrees(error.heading.toDouble()));
 
             // only draw when active; only one drive action should be active at a time
