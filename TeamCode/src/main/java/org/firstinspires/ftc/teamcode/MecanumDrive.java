@@ -296,15 +296,18 @@ public final class MecanumDrive {
 
             Pose2d positionError = txWorldTarget.value().minusExp(pose);
 
+
             double timeAfterEnd = t - timeTrajectory.duration;
             double allowedError = (1 / (1 + (1 / timeAfterEnd))) * 3;
 
             double allowedHeadingError = (1 / (1 + (1 / timeAfterEnd))) * 7;
             //TODO: test please
+
+
             if(timeAfterEnd > 0) {
                 // natlog passed into sigmoid, dont ask I use it for K/D
                 // fix heading error
-                if (positionError.position.norm() < allowedError) {
+                if (positionError.position.norm() < allowedError && Math.toDegrees(positionError.heading.toDouble()) < allowedHeadingError) {
                     leftFront.setPower(0);
                     leftBack.setPower(0);
                     rightBack.setPower(0);

@@ -18,11 +18,15 @@ public class ProtoAutoRedClose extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         ElapsedTime timer = new ElapsedTime();
 
-        drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, Math.toRadians(0)));
+        drive = new MecanumDrive(hardwareMap, new Pose2d(6, 108, Math.toRadians(0)));
 
 
         fullAuto = drive.actionBuilder(drive.pose)
-                .splineToConstantHeading(new Vector2d(24, -24), 0)
+                .splineToConstantHeading(new Vector2d(30, 84), 0)
+                .waitSeconds(3)
+                .strafeTo(new Vector2d(30, 120))
+                .turnTo(Math.PI)
+                .splineToSplineHeading(new Pose2d(12, 132, Math.PI * 0.75), Math.PI)
                 .build();
 
         while(!isStarted() && !opModeIsActive()) {}
@@ -31,5 +35,9 @@ public class ProtoAutoRedClose extends LinearOpMode {
 
         Actions.runBlocking(fullAuto);
     }
+
+
+
+
 
 }
