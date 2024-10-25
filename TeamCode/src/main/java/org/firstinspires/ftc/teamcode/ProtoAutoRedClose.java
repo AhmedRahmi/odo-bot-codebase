@@ -41,7 +41,10 @@ public class ProtoAutoRedClose extends LinearOpMode {
     }
 
 
-
+    // TODO: Spitballin!
+    // alr we gotta get this to cycle pointing towards the bottom of the field
+    // end positions should be (-63, -63)
+    // cycle to like (-36, -25.75), add 12 to the size ever time
 
     Action cycleBlock (Vector2d origin) {
         return drive.actionBuilder(new Pose2d(origin, Math.PI * 0.5))
