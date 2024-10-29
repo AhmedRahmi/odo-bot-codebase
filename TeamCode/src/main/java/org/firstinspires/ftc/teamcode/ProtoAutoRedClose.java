@@ -23,15 +23,16 @@ public class ProtoAutoRedClose extends LinearOpMode {
 
 
         Action depositSpecimen = drive.actionBuilder(drive.pose)
-                .splineToConstantHeading(new Vector2d( -12, -36), Math.PI)
+                .splineToConstantHeading(new Vector2d( -12, -36), Math.PI * 0.5)
                 .waitSeconds(3)
-                .strafeTo(new Vector2d(-48, -36))
+                .turnTo(Math.PI)
+                .splineToConstantHeading(new Vector2d(-36, -24), Math.PI * 0.5)
                 .build();
 
         fullAuto = new SequentialAction(
                 depositSpecimen,
-                cycleBlock (new Vector2d(-48, -36)),
-                cycleBlock (new Vector2d(-60, -36))
+                cycleBlock (new Vector2d(-36, -24)),
+                cycleBlock (new Vector2d(-48, -24))
         );
 
         while(!isStarted() && !opModeIsActive()) {}
@@ -47,11 +48,11 @@ public class ProtoAutoRedClose extends LinearOpMode {
     // cycle to like (-36, -25.75), add 12 to the size ever time
 
     Action cycleBlock (Vector2d origin) {
-        return drive.actionBuilder(new Pose2d(origin, Math.PI * 0.5))
+        return drive.actionBuilder(new Pose2d(origin, Math.PI))
                 .waitSeconds(5)
-                .splineToConstantHeading(new Vector2d(-60,-60), -Math.PI * 0.5)
+                .splineToSplineHeading(new Pose2d(-60,-60, Math.PI), -Math.PI * 0.5)
                 .waitSeconds(5)
-                .splineToConstantHeading(new Vector2d(origin.x - 12, origin.y), -Math.PI * 0.5)
+                .splineToSplineHeading(new Pose2d(origin.x - 12, origin.y, Math.PI), -Math.PI * 0.5)
                 .build();
     }
 
