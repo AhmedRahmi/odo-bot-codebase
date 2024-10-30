@@ -50,9 +50,9 @@ public class ProtoAutoRedClose extends LinearOpMode {
     Action cycleBlock (Vector2d origin) {
         return drive.actionBuilder(new Pose2d(origin, Math.PI))
                 .waitSeconds(5)
-                .splineToSplineHeading(new Pose2d(-60,-60, Math.PI), -Math.PI * 0.5)
+                .splineToSplineHeading(new Pose2d(-60,-60, -Math.PI * 0.5), -Math.PI * 0.5)
                 .waitSeconds(5)
-                .splineToSplineHeading(new Pose2d(origin.x - 12, origin.y, Math.PI), -Math.PI * 0.5)
+                .splineToSplineHeading(new Pose2d(origin.x - 12, origin.y, Math.PI ), Math.PI * 0.5)
                 .build();
     }
 
