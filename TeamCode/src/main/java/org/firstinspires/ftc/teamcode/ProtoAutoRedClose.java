@@ -19,7 +19,7 @@ public class ProtoAutoRedClose extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         ElapsedTime timer = new ElapsedTime();
 
-        drive = new MecanumDrive(hardwareMap, new Pose2d(-36, -66, Math.toRadians(90)));
+        drive = new MecanumDrive(hardwareMap, new Pose2d(-36, -63, Math.toRadians(90)));
 
 
         Action depositSpecimen = drive.actionBuilder(drive.pose)
@@ -29,10 +29,16 @@ public class ProtoAutoRedClose extends LinearOpMode {
                 .splineToConstantHeading(new Vector2d(-36, -24), Math.PI * 0.5)
                 .build();
 
+        Action park = drive.actionBuilder(new Pose2d(-60, -25.5, Math.PI))
+                .setTangent(Math.toRadians(90))
+                .splineToSplineHeading(new Pose2d(-28, -12, 0), 0)
+                .build();
+
         fullAuto = new SequentialAction(
                 depositSpecimen,
-                cycleBlock (new Vector2d(-36, -24)),
-                cycleBlock (new Vector2d(-48, -24))
+                cycleBlock (new Vector2d(-36, -25.5)),
+                cycleBlock (new Vector2d(-48, -25.5)),
+                park
         );
 
         while(!isStarted() && !opModeIsActive()) {}
@@ -49,10 +55,12 @@ public class ProtoAutoRedClose extends LinearOpMode {
 
     Action cycleBlock (Vector2d origin) {
         return drive.actionBuilder(new Pose2d(origin, Math.PI))
-                .waitSeconds(5)
-                .splineToSplineHeading(new Pose2d(-60,-60, -Math.PI * 0.5), -Math.PI * 0.5)
-                .waitSeconds(5)
-                .splineToSplineHeading(new Pose2d(origin.x - 12, origin.y, Math.PI ), Math.PI * 0.5)
+                .waitSeconds(2)
+                .setTangent(Math.toRadians(-90))
+                .splineToConstantHeading(new Vector2d(-60, -60), Math.toRadians(180))
+                .waitSeconds(0.5)
+                .setTangent(0)
+                .splineToConstantHeading(new Vector2d(origin.x - 12, origin.y), Math.toRadians(90))
                 .build();
     }
 
